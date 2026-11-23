@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Тестовое задание для Wildberries. Концепт карточки набора «Планеты» и расчёт юнит-экономики по FBS.">
+<title>Набор «Планеты» — тестовое для Wildberries</title>
+<style>
+:root{color-scheme:light;--ink:#171a26;--muted:#55525b;--paper:#f7f4ed;--line:#d8d2c4;--navy:#121827;--gold:#f0c792}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:1rem/1.55 system-ui,sans-serif}
+a{color:inherit;text-underline-offset:.24em}
+a:focus-visible{outline:3px solid #9f4c23;outline-offset:5px}
+.wrap{width:min(1180px,calc(100% - 64px));margin-inline:auto}
+.site-header{border-bottom:1px solid var(--line)}
+.header-row{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:24px;font-size:.87rem}
+.header-row p{margin:0;font-weight:750;letter-spacing:.05em}
+.header-row nav{display:flex;gap:25px}
+.header-row a{text-decoration:none}
+.header-row a:hover{text-decoration:underline}
+.intro{display:grid;grid-template-columns:1.3fr 1fr;align-items:end;gap:2rem;padding-block:clamp(2.5rem,6vw,5.1rem) 2.3rem}
+.eyebrow{font-size:.83rem;letter-spacing:.13em;font-weight:750;text-transform:uppercase;margin:0 0 .7rem;color:#79532e}
+h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:400;line-height:1;letter-spacing:-.05em;margin:0}
+h1{font-size:clamp(3rem,7vw,6.65rem)}
+h2{font-size:clamp(2.35rem,5vw,4.45rem)}
+.intro-copy{max-width:27rem;justify-self:end}
+.intro-copy p{margin:0 0 .75rem;font-size:clamp(1.05rem,1.7vw,1.3rem)}
+.intro-copy a{font-size:.9rem;color:var(--muted)}
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+figure{margin:0;min-width:0}
+figure a{display:block;border-radius:12px;overflow:hidden;background:var(--navy)}
+figure img{display:block;width:100%;aspect-ratio:3/4;object-fit:contain;transition:opacity .2s}
+figure a:hover img{opacity:.86}
+figcaption{margin-top:.55rem;font-size:.92rem;font-weight:650}
+.note{margin:1.2rem 0 2.6rem;color:var(--muted);font-size:.9rem}
+.economy{background:var(--navy);color:#f7f4ed;padding-block:clamp(2.5rem,5vw,4.4rem)}
+.economy .eyebrow{color:var(--gold)}
+.economy header p:last-child{color:#c9c9d5;max-width:49rem;margin:1rem 0 1.8rem}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0;border-block:1px solid #485267}
+.metrics div{padding:1.3rem 1.2rem 1.4rem 0}
+.metrics div+div{border-left:1px solid #485267;padding-left:1.2rem}
+.metrics dt{color:#d3d3de;font-size:.9rem;margin-bottom:.2rem}
+.metrics dd{font:clamp(1.75rem,4.5vw,3.65rem)/1.1 Georgia,serif;margin:0;color:var(--gold)}
+.breakdown{display:grid;grid-template-columns:1.15fr 1fr;gap:clamp(1.5rem,5vw,4.6rem);margin-top:2rem}
+h3{font-size:1rem;margin:0 0 .65rem}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:.93rem}
+th,td{padding:.43rem 0;border-bottom:1px solid #374257}
+th{text-align:left;font-weight:500}
+td{text-align:right;white-space:nowrap;padding-left:.6rem}
+tfoot th,tfoot td{font-weight:750;color:var(--gold)}
+.assumptions p{color:#d3d3de;margin:0 0 .85rem}
+.assumptions a{color:var(--gold)}
+@media(max-width:720px){
+  .wrap{width:calc(100% - 36px)}
+  .intro,.breakdown{grid-template-columns:1fr}
+  .intro{gap:1rem}
+  .intro-copy{justify-self:start}
+  .gallery{grid-template-columns:repeat(3,minmax(250px,81%));overflow-x:auto;scroll-snap-type:x mandatory;padding:0 0 12px}
+  figure{scroll-snap-align:start}
+  .metrics{grid-template-columns:1fr}
+  .metrics div{padding:1rem 0}
+  .metrics div+div{border-left:0;border-top:1px solid #485267;padding-left:0}
+}
+@media(max-width:400px){.header-row nav{gap:12px}.header-row{gap:12px}.gallery{grid-template-columns:repeat(3,88%)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}figure img{transition:none}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-row">
+    <p>Тестовое для Wildberries</p>
+    <nav aria-label="Разделы"><a href="#slides">Слайды</a><a href="#fbs">Расчёт FBS</a></nav>
+  </div>
+</header>
+<main>
+  <section id="slides" class="wrap" aria-labelledby="product">
+    <div class="intro">
+      <div><p class="eyebrow">Концепт карточки товара</p><h1 id="product">Набор «Планеты»</h1></div>
+      <div class="intro-copy">
+        <p>Девять коллекционных сфер с разными оттенками и рисунками в деревянной коробке.</p>
+        <a href="https://www.wildberries.ru/catalog/460224446/detail.aspx">Референс Wildberries · арт. 460224446</a>
+      </div>
+    </div>
+    <div class="gallery" aria-label="Три слайда инфографики">
+      <figure><a href="assets/cover.jpg" aria-label="Открыть обложку в полном размере"><img src="assets/cover.jpg" alt="Обложка карточки: девять цветных сфер в открытой деревянной коробке на фоне звёзд"></a><figcaption>Главный слайд</figcaption></figure>
+      <figure><a href="assets/details.jpg" aria-label="Открыть слайд с деталями в полном размере"><img src="assets/details.jpg" alt="Детали коллекции: сферы с разными цветами и узорами, вид под углом"></a><figcaption>Детали коллекции</figcaption></figure>
+      <figure><a href="assets/gift.jpg" aria-label="Открыть слайд о подарочном формате в полном размере"><img src="assets/gift.jpg" alt="Подарочный набор в деревянной коробке. Размер упаковки 25 на 10 на 5 сантиметров, вес 190 граммов"></a><figcaption>Подарочный формат</figcaption></figure>
+    </div>
+    <p class="note">Девять сфер и оформление коробки показаны в рамках дизайн-концепта.</p>
+  </section>
+  <section id="fbs" class="economy" aria-labelledby="economy-title">
+    <div class="wrap">
+      <header><p class="eyebrow">Wildberries · FBS</p><h2 id="economy-title">Расчёт на один выкуп</h2><p>При цене продажи 1 290 ₽. Упаковка 25 × 10 × 5 см, объём 1,25 л, вес брутто 0,19 кг.</p></header>
+      <dl class="metrics">
+        <div><dt>Прибыль на выкуп</dt><dd>301,97 ₽</dd></div>
+        <div><dt>Маржинальность</dt><dd>23,41%</dd></div>
+        <div><dt>Цена безубыточности</dt><dd>849,33 ₽</dd></div>
+      </dl>
+      <div class="breakdown">
+        <div>
+          <h3 id="cost-title">Расходы на единицу</h3>
+          <table aria-labelledby="cost-title">
+            <tbody>
+              <tr><th scope="row">Товар и фулфилмент</th><td>497,84 ₽</td></tr>
+              <tr><th scope="row">Комиссия WB</th><td>258,00 ₽</td></tr>
+              <tr><th scope="row">Логистика WB</th><td>84,15 ₽</td></tr>
+              <tr><th scope="row">НДС 5% внутри цены</th><td>61,43 ₽</td></tr>
+              <tr><th scope="row">УСН 6% с выручки без НДС</th><td>73,71 ₽</td></tr>
+              <tr><th scope="row">Обслуживание счёта, 1% от цены</th><td>12,90 ₽</td></tr>
+            </tbody>
+            <tfoot><tr><th scope="row">Всего</th><td>988,03 ₽</td></tr></tfoot>
+          </table>
+        </div>
+        <aside class="assumptions" aria-labelledby="assumptions-title">
+          <h3 id="assumptions-title">Допущения сценария</h3>
+          <p>Цена 1 290 ₽, комиссия WB 20% и коэффициент доставки 170% заданы для примера. Базовая логистика для 1,25 л составляет 49,50 ₽. С коэффициентом получается 84,15 ₽.</p>
+          <p>Эквайринг WB, реклама и резерв на невыкупы и возвраты в сценарии не заложены.</p>
+          <p><a href="https://seller.wildberries.ru/instructions/ru/ru/material/fees-site-section">Тарифы WB Partners</a></p>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>
